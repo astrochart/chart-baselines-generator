@@ -1,34 +1,10 @@
 # CHART Baselines Generator
 
-This repository is a standalone generator for the CHART build baselines image.
-It fetches the latest Google My Maps KML export, regenerates `chart_baselines.png`,
-and commits the updated image back to this repo on a schedule.
+This repository automatically regenerates the CHART build baselines image from the shared Google My Maps export.
 
-## How it works
+Each day, the workflow downloads the latest KML export, parses the build locations, and updates:
 
-- `assets/scripts/builds_uv.py` downloads the My Maps KML file
-- it parses the build locations
-- it generates `assets/scripts/chart_baselines.png`
-- the workflow commits `chart_baselines.png` and `builds.kml` if they change
+- `assets/scripts/builds.kml`
+- `assets/scripts/chart_baselines.png`
 
-## Set up
-
-1. Create a new GitHub repository and push this folder into it.
-2. Enable GitHub Actions for the repo.
-3. Optionally set branch protection rules on `main` if you want to preserve safety.
-
-## Workflow
-
-The workflow at `.github/workflows/generate-chart-baselines.yml` runs daily and
-can also be triggered manually.
-
-## Updating the CHART site
-
-Once this repo exists, update `wiki/builds.md` in the main site repo to point to
-this generated image via the raw GitHub URL:
-
-```html
-<img src="https://raw.githubusercontent.com/<OWNER>/<REPO>/main/assets/scripts/chart_baselines.png" alt="CHART build baselines">
-```
-
-Replace `<OWNER>` and `<REPO>` with your GitHub account/org and the repo name.
+If the image changes, the workflow commits the updated file back to this repository.
