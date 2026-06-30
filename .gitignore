@@ -1,0 +1,19 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+env/
+.venv/
+venv/
+.Python
+build/
+dist/
+.eggs/
+.python-version
+__pypackages__/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Local files
+.DS_Store
