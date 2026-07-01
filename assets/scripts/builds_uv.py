@@ -18,32 +18,53 @@ kml_url = (
 
 script_dir = Path(__file__).resolve().parent
 kml_path = script_dir / 'builds.kml'
-with urllib.request.urlopen(kml_url) as response:
-    fetched_kml = response.read()
-    tree = ET.fromstring(fetched_kml)
-
-if kml_path.exists():
-    previous_kml = kml_path.read_bytes()
-else:
-    previous_kml = b''
-
-if fetched_kml != previous_kml:
-    kml_path.write_bytes(fetched_kml)
 
 ns = {'kml': 'http://www.opengis.net/kml/2.2'}
-placemarks = tree.findall('.//kml:Placemark', ns)
-if not placemarks:
-    raise RuntimeError('No placemarks found in KML export.')
 
-lonlat = []
-for placemark in placemarks:
-    coord_el = placemark.find('.//kml:coordinates', ns)
-    if coord_el is None or not coord_el.text:
-        continue
-    lon_str, lat_str, *_ = coord_el.text.strip().split()[0].split(',')
-    lonlat.append((np.radians(float(lon_str)), np.radians(float(lat_str))))
 
-# Shift the longitude to make the rotation easier
+def parse_coords_from_kml(kml_bytes):
+    tree = ET.fromstring(kml_bytes)
+    placemarks = tree.findall('.//kml:Placemark', ns)
+    if not placemarks:
+        raise RuntimeError('No placemarks found in KML export.')
+
+    coords = []
+    for placemark in placemarks:
+        coord_el = placemark.find('.//kml:coordinates', ns)
+        if coord_el is None or not coord_el.text:
+            continue
+        lon_str, lat_str, *_ = coord_el.text.strip().split()[0].split(',')
+        coords.append((float(lon_str), float(lat_str)))
+    return coords
+
+
+def coords_hash(coords):
+    normalized = sorted((f"{lon:.8f},{lat:.8f}" for lon, lat in coords))
+    digest = hashlib.sha256('\n'.join(normalized).encode('utf-8')).hexdigest()
+    return digest
+
+with urllib.request.urlopen(kml_url) as response:
+    fetched_kml = response.read()
+
+current_coords = parse_coords_from_kml(fetched_kml)
+current_hash = coords_hash(current_coords)
+
+previous_hash = None
+if kml_path.exists():
+    previous_kml = kml_path.read_bytes()
+    try:
+        previous_coords = parse_coords_from_kml(previous_kml)
+        previous_hash = coords_hash(previous_coords)
+    except Exception:
+        previous_hash = None
+
+if previous_hash == current_hash:
+    print('No underlying coordinate changes detected; skipping plot generation.')
+    raise SystemExit(0)
+
+kml_path.write_bytes(fetched_kml)
+
+lonlat = [(np.radians(lon), np.radians(lat)) for lon, lat in current_coords]
 lonlat = [(lon - center_lon, lat) for lon, lat in lonlat]
 
 # Get x/y/z in meters from lon/lat
