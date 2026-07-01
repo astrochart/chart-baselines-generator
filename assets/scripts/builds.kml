@@ -146,6 +146,15 @@
           </coordinates>
         </Point>
       </Placemark>
+      <Placemark>
+        <name>Astronomical Institute of Czech Academy of Sciences</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            14.7801599,49.9100761,0
+          </coordinates>
+        </Point>
+      </Placemark>
     </Folder>
   </Document>
 </kml>
