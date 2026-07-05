@@ -201,6 +201,15 @@
           </coordinates>
         </Point>
       </Placemark>
+      <Placemark>
+        <name>University of North Dakota</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -97.0768014,47.922891,0
+          </coordinates>
+        </Point>
+      </Placemark>
     </Folder>
   </Document>
 </kml>
