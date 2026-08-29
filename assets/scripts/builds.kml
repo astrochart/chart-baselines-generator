@@ -220,6 +220,15 @@
           </coordinates>
         </Point>
       </Placemark>
+      <Placemark>
+        <name>Curtin University</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            115.8919818,-32.0054649,0
+          </coordinates>
+        </Point>
+      </Placemark>
     </Folder>
   </Document>
 </kml>
