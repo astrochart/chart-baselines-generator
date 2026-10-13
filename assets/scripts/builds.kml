@@ -229,6 +229,15 @@
           </coordinates>
         </Point>
       </Placemark>
+      <Placemark>
+        <name>Vienna High School</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            -88.8942985,37.4205096,0
+          </coordinates>
+        </Point>
+      </Placemark>
     </Folder>
   </Document>
 </kml>
